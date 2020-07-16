@@ -4,6 +4,9 @@ project.lock.json
 .DS_Store
 *.pyc
 
+# code coverage
+coverage
+
 # Visual Studio Code
 .vscode
 .ionide

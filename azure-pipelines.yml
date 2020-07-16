@@ -13,25 +13,28 @@ stages:
 - stage: CI
   jobs:
     - job: Build
+      variables:
+        solution: '**/*.sln'
+        buildConfiguration: 'Release'
       steps:
       - task: DotNetCoreCLI@2
         displayName: 'Dotnet restore'
         inputs:
           command: restore
-          projects: '**/*.sln'
+          projects: '$(solution)'
       - task: DotNetCoreCLI@2
         displayName: 'Dotnet build'
         inputs:
           command: build
-          projects: '**/*.sln'
-          arguments: --configuration Release /warnaserror
+          projects: '$(solution)'
+          arguments: --configuration $(buildConfiguration) /warnaserror
       - task: DotNetCoreCLI@2
         displayName: 'Dotnet test'
         inputs:
           command: test
           testRunTitle: $(Build.Repository.Name)
-          projects: '**/*.sln'
-          arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/coverage/'
+          projects: '$(solution)'
+          arguments: '--configuration $(buildConfiguration)'
       - task: reportgenerator@4
         displayName: 'Generate code report'
         inputs:
@@ -40,7 +43,7 @@ stages:
       - task: PublishCodeCoverageResults@1 
         displayName: 'Publish code report'
         inputs:
-          codeCoverageTool: Cobertura
+          codeCoverageTool: 'Cobertura'
           summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
       - task: NuGetCommand@2
         displayName: 'NuGet pack'

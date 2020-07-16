@@ -69,11 +69,17 @@ stages:
   jobs:
   - deployment: Publishing
     displayName: 'Publishing'
+    variables:
+      nuGetVersion: '4.3.0'
     environment: 'Elitekollektivet'
     strategy:
       runOnce:
         deploy:
           steps:
+          - task: NuGetToolInstaller@1
+            displayName: 'Installing NuGet {{ variables.nuGetVersion }}'
+            inputs:
+              versionSpec: $(nuGetVersion)
           - task: NuGetCommand@2
             displayName: 'Publishing NuGet package'
             inputs:

@@ -18,10 +18,10 @@ stages:
     variables:
       solution: '**/*.sln'
       buildConfiguration: 'Release'
-      dotnetVersion: '3.1.0'
+      dotnetVersion: '3.1.101'
     steps:
     - task: UseDotNet@2
-      displayName: 'Installing dotnet {{ variables.dotnetVersion }}'
+      displayName: 'Installing dotnet ${{ variables.dotnetVersion }}'
       inputs:
         packageType: 'sdk'
         version: $(dotnetVersion)
@@ -83,7 +83,7 @@ stages:
         deploy:
           steps:
           - task: NuGetToolInstaller@1
-            displayName: 'Installing NuGet {{ variables.nuGetVersion }}'
+            displayName: 'Installing NuGet ${{ variables.nuGetVersion }}'
             inputs:
               versionSpec: $(nuGetVersion)
           - task: NuGetCommand@2

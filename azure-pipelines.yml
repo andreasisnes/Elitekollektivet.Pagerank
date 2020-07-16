@@ -65,6 +65,7 @@ stages:
   jobs:
   - deployment: Publish
     displayName: 'Publishing'
+    environment: 'Elitekollektivet'
     strategy:
       runOnce:
         deploy:

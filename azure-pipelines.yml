@@ -18,13 +18,7 @@ stages:
     variables:
       solution: '**/*.sln'
       buildConfiguration: 'Release'
-      dotnetVersion: '3.1.101'
     steps:
-    - task: UseDotNet@2
-      displayName: 'Installing dotnet ${{ variables.dotnetVersion }}'
-      inputs:
-        packageType: 'sdk'
-        version: $(dotnetVersion)
     - task: DotNetCoreCLI@2
       displayName: 'Restoring dependencies'
       inputs:

@@ -8,6 +8,5 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics" Version="4.11.0"/>
-    <PackageReference Include="ReportGenerator" Version="4.5.4"/>
   </ItemGroup>
 </Project>

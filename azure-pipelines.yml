@@ -43,11 +43,11 @@ stages:
         reports: '$(Build.SourcesDirectory)/coverage/**/coverage.cobertura.xml'
         targetdir: '$(Build.SourcesDirectory)/coverage'
         reporttypes: 'Cobertura'
-    - task: PublishCodeCoverageResults@1 
+    - task: PublishCodeCoverageResults@1
       displayName: 'Publishing code coverage'
       inputs:
         codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
+        summaryFileLocation: '$(Build.SourcesDirectory)/coverage/Cobertura.xml'
     - task: NuGetCommand@2
       displayName: 'Creating NuGet package'
       inputs:
@@ -57,7 +57,7 @@ stages:
         versionEnvVar: Build.BuildNumber
         buildProperties: 'VERSION=$(Build.BuildNumber)'
     - task: PublishPipelineArtifact@1
-      displayName: 'Publish NuGet package'
+      displayName: 'Publish NuGet artifact'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: '$(artifactName)'

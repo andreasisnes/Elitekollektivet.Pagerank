@@ -1,5 +1,3 @@
-using CsvHelper.Configuration;
-
 namespace Elitekollektivet.Pagerank
 {
     public sealed class PagerankOptions

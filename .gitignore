@@ -6,6 +6,7 @@ project.lock.json
 
 # Visual Studio Code
 .vscode
+.ionide
 
 # User-specific files
 *.suo
@@ -31,4 +32,3 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 .fake
-.ionide/

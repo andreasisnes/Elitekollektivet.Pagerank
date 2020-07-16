@@ -1,7 +1,7 @@
-using Xunit;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Elitekollektivet.Pagerank.Tests
 {
@@ -18,18 +18,20 @@ namespace Elitekollektivet.Pagerank.Tests
         [Trait("Category", "Unit")]
         public async Task MakeStochastic_DenseWithZeroRows_EachRowShouldSumToOne()
         {
-            var dataset = new double[,] {
+            var dataset = new double[,]
+            {
                 { .3, .3, .3, .3 },
-                {  0,  0,  0, 0  },
-                { .5, .5,  0, 0  },
-                { .25, .25,  0, 0  }
+                { 0, 0, 0, 0 },
+                { .5, .5, 0, 0 },
+                { .25, .25, 0, 0 }
             };
-            var pagerank = _builder.Build(new PagerankOptions{
+            var pagerank = PagerankBuilder.Build(new PagerankOptions
+            {
                 MakeStochastic = true
             });
 
             pagerank.SetLinkMatrix(dataset);
-            await pagerank.MakeStochasticAsync();
+            await pagerank.MakeStochasticAsync().ConfigureAwait(false);
 
             Parallel.ForEach(Enumerable.Range(0, pagerank.Size), i =>
             {
@@ -41,17 +43,19 @@ namespace Elitekollektivet.Pagerank.Tests
         [Trait("Category", "Unit")]
         public async Task MakeStochastic_DenseWithANonZeroRow_EachCoefficientShouldBeTheSame()
         {
-            var dataset = new double[,] {
-                { .5, .5,  0, 0  },
-                { .5, .5,  0, 0  },
-                { .5, .5,  0, 0  },
-                { .5, .5,  0, 0  }
+            var dataset = new double[,]
+            {
+                { .5, .5, 0, 0 },
+                { .5, .5, 0, 0 },
+                { .5, .5, 0, 0 },
+                { .5, .5, 0, 0 }
             };
-            var pagerank = _builder.Build(new PagerankOptions{
+            var pagerank = PagerankBuilder.Build(new PagerankOptions
+            {
                 MakeStochastic = true
             });
             pagerank.SetLinkMatrix(dataset);
-            await pagerank.MakeStochasticAsync();
+            await pagerank.MakeStochasticAsync().ConfigureAwait(false);
 
             Assert.Equal(.5, pagerank.GetRow(0)[0]);
             Assert.Equal(.5, pagerank.GetRow(0)[1]);
@@ -63,18 +67,21 @@ namespace Elitekollektivet.Pagerank.Tests
         [Trait("Category", "Unit")]
         public async Task MakeIrreducible_DenseWithNonZeroRows_ShouldSubtractTheAlphaModifier()
         {
-            var dataset = new double[,] {
+            var dataset = new double[,]
+            {
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 }
             };
-            var pagerank = _builder.Build(new PagerankOptions{
+
+            var pagerank = PagerankBuilder.Build(new PagerankOptions
+            {
                 MakeStochastic = true,
                 ConvergenceRate = .15
             });
             pagerank.SetLinkMatrix(dataset);
-            await pagerank.MakeIrreducibleAsync();
+            await pagerank.MakeIrreducibleAsync().ConfigureAwait(false);
 
             Parallel.ForEach(Enumerable.Range(0, pagerank.Size), i =>
             {
@@ -92,7 +99,8 @@ namespace Elitekollektivet.Pagerank.Tests
         [Trait("Category", "Unit")]
         public void SetLinkMatrix_InvalidDense_ShouldRaiseArgumentException()
         {
-            var dataset = new double[,] {
+            var dataset = new double[,]
+            {
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 }
@@ -104,20 +112,21 @@ namespace Elitekollektivet.Pagerank.Tests
         [Trait("Category", "Unit")]
         public void SetLinkMatrix_ValidDense_ShouldSetDense()
         {
-            var dataset = new double[,] {
+            var dataset = new double[,]
+            {
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 },
                 { .5, .5, 0, 0 }
             };
-            
-            var pagerank =_builder.Build();
+
+            var pagerank = _builder.Build();
             pagerank.SetLinkMatrix(dataset);
             var result = pagerank.ToArray();
 
             for (int i = 0; i < dataset.GetLowerBound(0); i++)
             {
-                for(int j = 0; i < dataset.GetLowerBound(1); j++)
+                for (int j = 0; i < dataset.GetLowerBound(1); j++)
                 {
                     Assert.Equal(dataset[i, j], result[i, j]);
                 }
@@ -128,14 +137,15 @@ namespace Elitekollektivet.Pagerank.Tests
         [Trait("Category", "Unit")]
         public async Task Run_ValidDense_ShouldRankLinks()
         {
-            var dataset = new double[,] {
+            var dataset = new double[,]
+            {
                 { .5, .5,  0, 0 },
                 { .5,  0, .5, 0 },
                 { .5, .5,  0, 0 },
                 { 1,   0,  0, 0 }
             };
 
-            var pagerank = _builder.Build(new PagerankOptions
+            var pagerank = PagerankBuilder.Build(new PagerankOptions
             {
                 MakeIrreducible = true,
                 MakeStochastic = true,
@@ -143,19 +153,19 @@ namespace Elitekollektivet.Pagerank.Tests
                 Iterations = 200
             });
             pagerank.SetLinkMatrix(dataset);
-            var result = await pagerank.RunAsync();
+            var result = await pagerank.RunAsync().ConfigureAwait(false);
 
-            Assert.True(result[0, 0] > result[1, 0] );
-            Assert.True(result[0, 1] > result[2, 0] );
-            Assert.True(result[0, 2] > result[3, 0] );
+            Assert.True(result[0, 0] > result[1, 0]);
+            Assert.True(result[0, 1] > result[2, 0]);
+            Assert.True(result[0, 2] > result[3, 0]);
         }
 
         [Fact(DisplayName="SetLinkMatrix_NoMatrix_RaiseNullReferenceException")]
         [Trait("Category", "Unit")]
         public async Task SetLinkMatrix_NoMatrix_RaiseNullReferenceException()
         {
-            var pagerank = _builder.Build(new PagerankOptions());
-            await Assert.ThrowsAsync<NullReferenceException>(async () => await pagerank.RunAsync()) ;
+            var pagerank = PagerankBuilder.Build(new PagerankOptions());
+            await Assert.ThrowsAsync<NullReferenceException>(async () => await pagerank.RunAsync().ConfigureAwait(false)).ConfigureAwait(false);
         }
     }
 }

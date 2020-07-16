@@ -28,7 +28,7 @@ namespace Elitekollektivet.Pagerank.Tests
         public void Build_NoConfiguration_DefaultIteration()
         {
             var builder = new PagerankBuilder();
-            Assert.Equal(builder.Options.Iterations, builder.DefaultIterations);
+            Assert.Equal(builder.Options.Iterations, PagerankBuilder.DefaultIterations);
         }
 
         [Fact(DisplayName="Build_Setters_SetValueIsCorrect")]

@@ -6,13 +6,13 @@ namespace Elitekollektivet.Pagerank.Interfaces
     {
         int Size { get; }
 
-        IPagerank SetLinkMatrix(double [,] linkMatrix);
+        IPagerank SetLinkMatrix(double[,] linkMatrix);
 
-        IPagerank SetLinkMatrix(double [][] linkMatrix);
+        IPagerank SetLinkMatrix(double[][] linkMatrix);
 
         Task<IPagerank> MakeStochasticAsync();
 
-        IPagerank MakeStochastic(); 
+        IPagerank MakeStochastic();
 
         Task<IPagerank> MakeIrreducibleAsync();
 

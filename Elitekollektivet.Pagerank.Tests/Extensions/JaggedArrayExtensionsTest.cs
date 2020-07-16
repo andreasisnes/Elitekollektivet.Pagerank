@@ -11,14 +11,14 @@ namespace Elitekollektivet.Pagerank.Tests.Extensions
         {
             var testData = new double[][]
             {
-                new double[] {1, 2},
-                new double[] {3, 4}
+                new double[] { 1, 2 },
+                new double[] { 3, 4 }
             };
 
             var result = testData.ToMultidimensional();
-            for(int i = 0; i < testData.Length; i++)
+            for (int i = 0; i < testData.Length; i++)
             {
-                for(int j = 0; j < testData[0].Length; j++)
+                for (int j = 0; j < testData[0].Length; j++)
                 {
                     Assert.Equal(result[i, j], testData[i][j]);
                 }

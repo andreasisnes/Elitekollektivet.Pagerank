@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CsvHelper;
 using Elitekollektivet.Pagerank.Extensions;
 using Elitekollektivet.Pagerank.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -10,25 +8,17 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Elitekollektivet.Pagerank
 {
-    sealed internal class Pagerank : IPagerank
+    internal sealed class Pagerank : IPagerank
     {
         private PagerankOptions _options;
 
         private Matrix<double> dense;
-
-        private Matrix<double> _dense
-        {
-            get { return dense ?? throw new NullReferenceException("No link-matrix is set"); }
-            set { dense = value; }
-        }
 
         private bool _madeStochastic;
 
         private bool _madeIrreducible;
 
         private object _mutex;
-
-        public int Size { get {return _dense.RowCount; } }
 
         public Pagerank(PagerankOptions options)
         {
@@ -38,22 +28,34 @@ namespace Elitekollektivet.Pagerank
             _madeStochastic = false;
         }
 
-        public IPagerank SetLinkMatrix(double [][] linkMatrix)
+        public int Size
+        {
+            get { return Dense.RowCount; }
+        }
+
+        private Matrix<double> Dense
+        {
+            get { return dense ?? throw new NullReferenceException("No link-matrix is set"); }
+            set { dense = value; }
+        }
+
+        public IPagerank SetLinkMatrix(double[][] linkMatrix)
         {
             return SetLinkMatrix(linkMatrix.ToMultidimensional());
         }
 
-        public IPagerank SetLinkMatrix(double [,] linkMatrix)
+        public IPagerank SetLinkMatrix(double[,] linkMatrix)
         {
-            lock(_mutex)
+            lock (_mutex)
             {
                 _madeIrreducible = false;
                 _madeStochastic = false;
-                _dense = DenseMatrix.OfArray(linkMatrix);
-                if(_dense.ColumnCount != _dense.RowCount)
+                Dense = DenseMatrix.OfArray(linkMatrix);
+                if (Dense.ColumnCount != Dense.RowCount)
                 {
                     throw new ArgumentException($"{linkMatrix} is not a square matrix");
                 }
+
                 return this;
             }
         }
@@ -65,22 +67,23 @@ namespace Elitekollektivet.Pagerank
 
         public IPagerank MakeStochastic()
         {
-            lock(_mutex)
+            lock (_mutex)
             {
-                if(!_madeStochastic)
+                if (!_madeStochastic)
                 {
                     Parallel.ForEach(Enumerable.Range(0, Size), i =>
                     {
-                        if (_dense.Row(i).Sum() <= 0.0)
+                        if (Dense.Row(i).Sum() <= 0.0)
                         {
-                            _dense.SetRow(i, DenseVector.Create(Size, 1.0 / Size));
+                            Dense.SetRow(i, DenseVector.Create(Size, 1.0 / Size));
                         }
                         else
                         {
-                            _dense.SetRow(i, _dense.Row(i).Divide(_dense.Row(i).Sum()));
+                            Dense.SetRow(i, Dense.Row(i).Divide(Dense.Row(i).Sum()));
                         }
                     });
                 }
+
                 _madeStochastic = true;
                 return this;
             }
@@ -93,14 +96,13 @@ namespace Elitekollektivet.Pagerank
 
         public IPagerank MakeIrreducible()
         {
-            lock(_mutex)
+            lock (_mutex)
             {
                 if (!_madeIrreducible)
                 {
-                    _dense = _dense.Multiply(_options.ConvergenceRate).Add(
-                        DenseMatrix.Create(Size, Size, (1.0 / Size) * (1.0 - _options.ConvergenceRate))
-                    );
+                    Dense = Dense.Multiply(_options.ConvergenceRate).Add(DenseMatrix.Create(Size, Size, (1.0 / Size) * (1.0 - _options.ConvergenceRate)));
                 }
+
                 _madeIrreducible = true;
                 return this;
             }
@@ -108,53 +110,55 @@ namespace Elitekollektivet.Pagerank
 
         public Task<double[,]> RunAsync()
         {
-            return Task.Run(() => _Run(_options.Iterations));
+            return Task.Run(() => Execute(_options.Iterations));
         }
 
         public Task<double[,]> RunAsync(int iterations)
         {
-            return Task.Run(() => _Run(iterations));
+            return Task.Run(() => Execute(iterations));
         }
 
         public double[,] Run(int iterations)
         {
-            return _Run(iterations);
+            return Execute(iterations);
         }
 
         public double[,] Run()
         {
-            return _Run(_options.Iterations);
+            return Execute(_options.Iterations);
         }
 
-        private double[,] _Run(int iterations)
+        public double[,] ToArray()
         {
-            lock(_mutex)
+            return Dense.ToArray();
+        }
+
+        public double[] GetRow(int i)
+        {
+            return Dense.Row(i).ToArray();
+        }
+
+        public double[] GetColumn(int j)
+        {
+            return Dense.Column(j).ToArray();
+        }
+
+        private double[,] Execute(int iterations)
+        {
+            lock (_mutex)
             {
                 if (!_madeStochastic && _options.MakeStochastic)
                 {
                     MakeStochastic();
                 }
+
                 if (!_madeIrreducible && _options.MakeIrreducible)
                 {
                     MakeIrreducible();
                 }
-                return _dense.Transpose().Power(_options.Iterations).ToArray();
+
+                return Dense.Transpose().Power(iterations).ToArray();
             }
-        }
-
-        public double[,] ToArray()
-        {
-            return _dense.ToArray();
-        }
-
-        public double[] GetRow(int i)
-        {
-            return _dense.Row(i).ToArray();
-        }
-
-        public double[] GetColumn(int j) 
-        {
-            return _dense.Column(j).ToArray();
         }
     }
 }

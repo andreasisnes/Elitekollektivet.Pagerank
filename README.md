@@ -1,4 +1,8 @@
 [![Build Status](https://dev.azure.com/andreasisnes/Elitekollektivet/_apis/build/status/andreasisnes.Elitekollektivet.Pagerank?branchName=master)](https://dev.azure.com/andreasisnes/Elitekollektivet/_build/latest?definitionId=10&branchName=master)
+[![NuGet Version](https://img.shields.io/nuget/v/Elitekollektivet.Pagerank?style=plastic)](https://www.nuget.org/packages/Elitekollektivet.Pagerank/)
+[![NuGet Download](https://img.shields.io/nuget/dt/Elitekollektivet.Pagerank)](https://www.nuget.org/packages/Elitekollektivet.Pagerank/)
+
+[](https://img.shields.io/nuget/dt/Elitekollektivet.Pagerank)
 
 # Introduction 
 TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 

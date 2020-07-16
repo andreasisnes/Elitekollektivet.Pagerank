@@ -32,7 +32,7 @@ stages:
           testRunTitle: $(Build.Repository.Name)
           projects: '**/*.sln'
           arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/coverage/'
-      - task: reportgenerator@4art)
+      - task: reportgenerator@4
         displayName: 'Generate code report'
         inputs:
           reports: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'

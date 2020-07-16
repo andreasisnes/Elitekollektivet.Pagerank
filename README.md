@@ -5,22 +5,73 @@
 [](https://img.shields.io/nuget/dt/Elitekollektivet.Pagerank)
 
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+PageRank is a link analysis algorithm and it assigns a numerical weighting to each element of a hyperlinked set of documents, such as the World Wide Web, with the purpose of "measuring" its relative importance within the set. The algorithm may be applied to any collection of entities with reciprocal quotations and references. [[1]](#1)
+
+![[[2]](#2)](https://www.globalsoftwaresupport.com/wp-content/uploads/2019/09/Untitled-min-600x271.jpg)
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+## Installation
+Via [NuGet](https://www.nuget.org/packages/Elitekollektivet.Pagerank/)
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+### Package Manager
+```bash
+Install-Package Elitekollektivet.Pagerank -Version {VERSION}
+```
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+### .NET CLI
+```bash
+dotnet add package Elitekollektivet.Pagerank --version {VERSION}`
+```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+### PackageReference
+```xml
+<PackageReference Include="Elitekollektivet.Pagerank" Version="{VERSION}" />
+```
+
+### Paket CLI
+```bash
+paket add Elitekollektivet.Pagerank --version ${VERSION}
+```
+The newest version is displayed in the nuget badge.
+
+## Usage
+```C#
+        static void Main(string[] args)
+        {
+            var data = new double[,]
+            {
+                { .5, .5, 0, 0 },
+                { .5, .5, 0, 0 },
+                { .2, .2, 2, 3 },
+                { .5, .3, 2, 0 },
+            };
+
+            var result = new PagerankBuilder(new PagerankOptions
+            {
+                ConvergenceRate = .85,
+                MakeIrreducible = true,
+                MakeStochastic = true,
+                Iterations = 100,
+            }).Build().SetLinkMatrix(data).Run();
+            
+            for (int i = 0; i <= result.GetUpperBound(0); i++)
+            {
+                System.Console.WriteLine(result[i, 0]);
+            }
+        }
+```
+
+```bash
+# stdout
+0.37322354771784405
+0.3666104771784249
+0.15124481327800834
+0.10892116182572618
+```
+
+## References
+<a id="1">[1]</a> 
+https://en.wikipedia.org/wiki/PageRank
+
+<a id="2">[2]</a> 
+https://www.globalsoftwaresupport.com/wp-content/uploads/2019/09/Untitled-min-600x271.jpg

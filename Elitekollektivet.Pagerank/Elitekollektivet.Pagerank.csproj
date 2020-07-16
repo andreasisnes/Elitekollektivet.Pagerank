@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Elitekollektivet.Pagerank</PackageId>
-    <Version>$VERSION$</Version>
     <Authors>Andreas Isnes Nilsen</Authors>
     <Description>Pagerank implementation</Description>
     <IsPackable>true</IsPackable>

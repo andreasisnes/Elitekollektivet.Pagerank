@@ -1,12 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <PackageId>Elitekollektivet.Pagerank</PackageId>
     <Authors>Andreas Isnes Nilsen</Authors>
     <Description>Pagerank implementation</Description>
     <IsPackable>true</IsPackable>
-  </PropertyGroup>
+    <RepositoryUrl>https://github.com/andreasisnes/Elitekollektivet.Pagerank</RepositoryUrl>
+  <PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics" Version="4.11.0"/>
   </ItemGroup>
+
 </Project>

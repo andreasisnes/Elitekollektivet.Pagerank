@@ -10,7 +10,7 @@
     <Description>Pagerank implementation</Description>
     <IsPackable>true</IsPackable>
     <RepositoryUrl>https://github.com/andreasisnes/Elitekollektivet.Pagerank</RepositoryUrl>
-  <PropertyGroup>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics" Version="4.11.0"/>

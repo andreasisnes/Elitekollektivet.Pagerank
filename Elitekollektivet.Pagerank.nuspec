@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>Elitekollektivet.Pagerank</id>
+        <version>$VERSION$</version>
+        <authors>Andreas Isnes Nilsen</authors>
+        <description>Pagerank</description>
+    </metadata>
+</package>

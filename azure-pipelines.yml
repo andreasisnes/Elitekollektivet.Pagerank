@@ -48,11 +48,12 @@ stages:
       inputs:
         codeCoverageTool: 'Cobertura'
         summaryFileLocation: '$(Build.SourcesDirectory)/coverage/Cobertura.xml'
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
       displayName: 'Creating NuGet package'
       inputs:
         command: pack
-        packagesToPack: '**/*.nuspec'
+        packagesToPack: 'Elitekollektivet.Pagerank'
+        nobuild: true
         versioningScheme: byEnvVar
         versionEnvVar: Build.BuildNumber
         buildProperties: 'VERSION=$(Build.BuildNumber)'

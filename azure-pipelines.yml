@@ -1,0 +1,79 @@
+trigger:
+- master
+
+name: 1.0.$(rev:r)
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: CI
+  jobs:
+    - job: Build
+      steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Dotnet restore'
+        inputs:
+          command: restore
+          projects: '**/*.sln'
+      - task: DotNetCoreCLI@2
+        displayName: 'Dotnet build'
+        inputs:
+          command: build
+          projects: '**/*.sln'
+          arguments: --configuration Release /warnaserror
+      - task: DotNetCoreCLI@2
+        displayName: 'Dotnet test'
+        inputs:
+          command: test
+          testRunTitle: $(Build.Repository.Name)
+          projects: '**/*.sln'
+          arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/coverage/'
+      - task: reportgenerator@4
+        displayName: 'Generate code report'
+        inputs:
+          reports: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
+          targetdir: '$(Build.SourcesDirectory)/coveragereport'
+      - task: PublishCodeCoverageResults@1 
+        displayName: 'Publish code report'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
+      - task: NuGetCommand@2
+        displayName: 'NuGet pack'
+        inputs:
+          command: pack
+          packagesToPack: '**/*.nuspec'
+          versioningScheme: byEnvVar
+          versionEnvVar: Build.BuildNumber
+          buildProperties: 'VERSION=$(Build.BuildNumber)'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish build artifact'
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
+          ArtifactName: $(Build.Repository.Name)
+          publishLocation: Container
+
+- stage: CD
+  variables:
+    VstsFeed: 'Dotnet.Core.API'
+  displayName: 'CD-${{ variables.VstsFeed }}'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: Publish
+    displayName: Publish To NuGet feed
+    steps:
+      - task: DownloadPipelineArtifact@2
+        displayName: 'Download build artifact'
+        inputs:
+          buildType: current
+          artifactName: $(Build.Repository.Name)
+          itemPattern: '**'
+          targetPath: $Pipeline.Workspace
+      - task: NuGetCommand@2
+        displayName: 'Publish NuGet package'
+        inputs:
+          command: push
+          packagesToPush: '$(Pipeline.Workspace)/**/*.nupkg'
+          nuGetFeedType: internal
+          publishVstsFeed: $(VstsFeed)

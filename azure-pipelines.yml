@@ -1,34 +1,79 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
+name: 1.0.$(rev:r)
+
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+stages:
+- stage: CI
+  jobs:
+    - job: Build
+      steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Dotnet restore'
+        inputs:
+          command: restore
+          projects: '**/*.sln'
+      - task: DotNetCoreCLI@2
+        displayName: 'Dotnet build'
+        inputs:
+          command: build
+          projects: '**/*.sln'
+          arguments: --configuration Release /warnaserror
+      - task: DotNetCoreCLI@2
+        displayName: 'Dotnet test'
+        inputs:
+          command: test
+          testRunTitle: $(Build.Repository.Name)
+          projects: '**/*.sln'
+          arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/coverage/'
+      - task: reportgenerator@4
+        displayName: 'Generate code report'
+        inputs:
+          reports: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
+          targetdir: '$(Build.SourcesDirectory)/coveragereport'
+      - task: PublishCodeCoverageResults@1 
+        displayName: 'Publish code report'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
+      - task: NuGetCommand@2
+        displayName: 'NuGet pack'
+        inputs:
+          command: pack
+          packagesToPack: '**/*.nuspec'
+          versioningScheme: byEnvVar
+          versionEnvVar: Build.BuildNumber
+          buildProperties: 'VERSION=$(Build.BuildNumber)'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish build artifact'
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
+          ArtifactName: $(Build.Repository.Name)
+          publishLocation: Container
 
-steps:
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+- stage: CD
+  variables:
+    VstsFeed: 'Dotnet.Core.API'
+  displayName: 'CD-${{ variables.VstsFeed }}'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: Publish
+    displayName: Publish To NuGet feed
+    steps:
+      - task: DownloadPipelineArtifact@2
+        displayName: 'Download build artifact'
+        inputs:
+          buildType: current
+          artifactName: $(Build.Repository.Name)
+          itemPattern: '**'
+          targetPath: $Pipeline.Workspace
+      - task: NuGetCommand@2
+        displayName: 'Publish NuGet package'
+        inputs:
+          command: push
+          packagesToPush: '$(Pipeline.Workspace)/**/*.nupkg'
+          nuGetFeedType: internal
+          publishVstsFeed: $(VstsFeed)

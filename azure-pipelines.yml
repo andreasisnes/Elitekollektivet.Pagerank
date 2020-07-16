@@ -58,12 +58,10 @@ stages:
           publishLocation: Container
 
 - stage: CD
-  variables:
-    VstsFeed: 'Dotnet.Core.API'
-  displayName: 'CD-${{ variables.VstsFeed }}'
+  displayName: 'NuGet'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - deployment: Publish
+  - deployment: Publishing
     displayName: 'Publishing'
     environment: 'Elitekollektivet'
     strategy:
@@ -73,7 +71,7 @@ stages:
           - task: NuGetCommand@2
             displayName: 'Publish NuGet package'
             inputs:
-              command: push
+              command: 'push'
               packagesToPush: '$(Pipeline.Workspace)/**/*.nupkg'
-              nuGetFeedType: internal
-              publishVstsFeed: $(VstsFeed)
+              nuGetFeedType: 'external'
+              publishFeedCredentials: 'NuGet'

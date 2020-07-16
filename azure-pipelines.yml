@@ -10,72 +10,80 @@ variables:
   artifactName: 'NuGet.Package'
 
 stages:
-- stage: CI
+- stage: ContinuousIntegration
+  displayName: 'Continuous Integration'
   jobs:
-    - job: Build
-      variables:
-        solution: '**/*.sln'
-        buildConfiguration: 'Release'
-      steps:
-      - task: DotNetCoreCLI@2
-        displayName: 'Dotnet restore'
-        inputs:
-          command: restore
-          projects: '$(solution)'
-      - task: DotNetCoreCLI@2
-        displayName: 'Dotnet build'
-        inputs:
-          command: build
-          projects: '$(solution)'
-          arguments: --configuration $(buildConfiguration) /warnaserror
-      - task: DotNetCoreCLI@2
-        displayName: 'Dotnet test'
-        inputs:
-          command: test
-          testRunTitle: $(Build.Repository.Name)
-          projects: '$(solution)'
-          arguments: '--configuration $(buildConfiguration)'
-      - task: reportgenerator@4
-        displayName: 'Generate code report'
-        inputs:
-          reports: '$(Build.SourcesDirectory)/coverage/**/coverage.cobertura.xml'
-          targetdir: '$(Build.SourcesDirectory)/coverage'
-          reporttypes: 'Cobertura'
-      - task: PublishCodeCoverageResults@1 
-        displayName: 'Publish code report'
-        inputs:
-          codeCoverageTool: 'Cobertura'
-          summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
-      - task: NuGetCommand@2
-        displayName: 'NuGet pack'
-        inputs:
-          command: pack
-          packagesToPack: '**/*.nuspec'
-          versioningScheme: byEnvVar
-          versionEnvVar: Build.BuildNumber
-          buildProperties: 'VERSION=$(Build.BuildNumber)'
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish build artifact'
-        inputs:
-          PathtoPublish: $(Build.ArtifactStagingDirectory)
-          ArtifactName: $(artifactName)
-          publishLocation: Container
+  - job: Build
+    displayName: 'Building'
+    variables:
+      solution: '**/*.sln'
+      buildConfiguration: 'Release'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restoring dependencies'
+      inputs:
+        command: restore
+        projects: '$(solution)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Building solution'
+      inputs:
+        command: build
+        projects: '$(solution)'
+        arguments: --configuration $(buildConfiguration) /warnaserror
+    - task: DotNetCoreCLI@2
+      displayName: 'Running unit tests'
+      inputs:
+        command: test
+        testRunTitle: $(Build.Repository.Name)
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration)'
+    - task: reportgenerator@4
+      displayName: 'Generating code report'
+      inputs:
+        reports: '$(Build.SourcesDirectory)/coverage/**/coverage.cobertura.xml'
+        targetdir: '$(Build.SourcesDirectory)/coverage'
+        reporttypes: 'Cobertura'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publishing code coverage'
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)/coverage/Cobertura.xml'
+    - task: NuGetCommand@2
+      displayName: 'Creating NuGet package'
+      inputs:
+        command: pack
+        packagesToPack: '**/*.nuspec'
+        versioningScheme: byEnvVar
+        versionEnvVar: Build.BuildNumber
+        buildProperties: 'VERSION=$(Build.BuildNumber)'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish NuGet artifact'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: '$(artifactName)'
+        publishLocation: 'pipeline'
 
-- stage: CD
-  displayName: 'NuGet'
+- stage: ContinuousDelivery
+  displayName: 'Continuous Delivery'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: Publishing
     displayName: 'Publishing'
+    variables:
+      nuGetVersion: '4.3.0'
     environment: 'Elitekollektivet'
     strategy:
       runOnce:
         deploy:
           steps:
+          - task: NuGetToolInstaller@1
+            displayName: 'Installing NuGet ${{ variables.nuGetVersion }}'
+            inputs:
+              versionSpec: $(nuGetVersion)
           - task: NuGetCommand@2
-            displayName: 'Publish NuGet package'
+            displayName: 'Publishing NuGet package'
             inputs:
               command: 'push'
-              packagesToPush: '$(Pipeline.Workspace)/**/*.nupkg'
+              packagesToPush: '$(Pipeline.Workspace)/$(artifactName)/*.nupkg'
               nuGetFeedType: 'external'
               publishFeedCredentials: 'NuGet'

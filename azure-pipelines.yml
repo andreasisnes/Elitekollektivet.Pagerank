@@ -38,8 +38,9 @@ stages:
       - task: reportgenerator@4
         displayName: 'Generate code report'
         inputs:
-          reports: '$(Build.SourcesDirectory)/TestResults/coverage/coverage.cobertura.xml'
-          targetdir: '$(Build.SourcesDirectory)/coveragereport'
+          reports: '$(Build.SourcesDirectory)/coverage/**/coverage.cobertura.xml'
+          targetdir: '$(Build.SourcesDirectory)/coverage'
+          reporttypes: 'Cobertura'
       - task: PublishCodeCoverageResults@1 
         displayName: 'Publish code report'
         inputs:

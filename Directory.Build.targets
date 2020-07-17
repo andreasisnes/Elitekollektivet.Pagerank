@@ -1,9 +1,0 @@
-<Project>
-    <PropertyGroup>
-        <CollectCoverage>true</CollectCoverage>
-        <UseSourceLink>true</UseSourceLink>
-        <CoverletOutputFormat>cobertura</CoverletOutputFormat>
-        <Exclude>[xunit.*]*</Exclude>
-        <CoverletOutput>$(SolutionDir)coverage/$(AssemblyName)/</CoverletOutput>
-    </PropertyGroup>
-</Project>

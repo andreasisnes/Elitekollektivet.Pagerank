@@ -1,7 +1,7 @@
 [![Build Status](https://dev.azure.com/andreasisnes/Elitekollektivet/_apis/build/status/andreasisnes.Elitekollektivet.Pagerank?branchName=master)](https://dev.azure.com/andreasisnes/Elitekollektivet/_build/latest?definitionId=10&branchName=master)
 [![NuGet Version](https://img.shields.io/nuget/v/Elitekollektivet.Pagerank?style=plastic)](https://www.nuget.org/packages/Elitekollektivet.Pagerank/)
 [![NuGet Download](https://img.shields.io/nuget/dt/Elitekollektivet.Pagerank)](https://www.nuget.org/packages/Elitekollektivet.Pagerank/)
-[![NuGet Download](https://img.shields.io/azure-devops/coverage/andreasisnes/Elitekollektivet/10/master)](https://www.nuget.org/packages/Elitekollektivet.Pagerank/)
+[![NuGet Download](https://img.shields.io/azure-devops/coverage/andreasisnes/Elitekollektivet/10/master)](https://dev.azure.com/andreasisnes/Elitekollektivet/_build/latest?definitionId=10&branchName=master)
 
 # Introduction 
 PageRank is a link analysis algorithm and it assigns a numerical weighting to each element of a hyperlinked set of documents, such as the World Wide Web, with the purpose of "measuring" its relative importance within the set. The algorithm may be applied to any collection of entities with reciprocal quotations and references. [[1]](#1)

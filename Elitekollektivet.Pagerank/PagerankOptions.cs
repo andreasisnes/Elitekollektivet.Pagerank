@@ -6,6 +6,6 @@ namespace Elitekollektivet.Pagerank
 
         public bool MakeStochastic { get; set; }
 
-        public double ConvergenceRate { get; set; }
+        public double? ConvergenceRate { get; set; }
     }
 }

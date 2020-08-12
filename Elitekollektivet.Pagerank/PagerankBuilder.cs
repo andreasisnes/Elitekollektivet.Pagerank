@@ -19,6 +19,11 @@ namespace Elitekollektivet.Pagerank
             {
                 _options.Iterations = DefaultIterations;
             }
+
+            if (_options.ConvergenceRate == null)
+            {
+                _options.ConvergenceRate = 1.0;
+            }
         }
 
         public static int DefaultIterations

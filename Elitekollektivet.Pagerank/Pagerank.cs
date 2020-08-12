@@ -100,7 +100,7 @@ namespace Elitekollektivet.Pagerank
             {
                 if (!_madeIrreducible)
                 {
-                    Dense = Dense.Multiply(_options.ConvergenceRate).Add(DenseMatrix.Create(Size, Size, (1.0 / Size) * (1.0 - _options.ConvergenceRate)));
+                    Dense = Dense.Multiply(_options.ConvergenceRate ?? 1.0).Add(DenseMatrix.Create(Size, Size, (1.0 / Size) * (1.0 - _options.ConvergenceRate ?? 1.0)));
                 }
 
                 _madeIrreducible = true;

@@ -7,7 +7,7 @@ namespace Elitekollektivet.Pagerank.Tests
 {
     public class PagerankTest
     {
-        private PagerankBuilder _builder;
+        private readonly PagerankBuilder _builder;
 
         public PagerankTest()
         {
@@ -147,7 +147,6 @@ namespace Elitekollektivet.Pagerank.Tests
 
             var pagerank = PagerankBuilder.Build(new PagerankOptions
             {
-                MakeIrreducible = true,
                 MakeStochastic = true,
                 ConvergenceRate = .5,
                 Iterations = 200

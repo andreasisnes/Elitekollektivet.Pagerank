@@ -5,7 +5,7 @@ namespace Elitekollektivet.Pagerank
 {
     public sealed class PagerankBuilder
     {
-        private PagerankOptions _options;
+        private readonly PagerankOptions _options;
 
         public PagerankBuilder()
             : this(new PagerankOptions())
@@ -45,12 +45,6 @@ namespace Elitekollektivet.Pagerank
         public PagerankBuilder MakeStochastic(bool makeStochastic)
         {
             _options.MakeStochastic = makeStochastic;
-            return this;
-        }
-
-        public PagerankBuilder MakeIrreducible(bool makeIrreducible)
-        {
-            _options.MakeIrreducible = makeIrreducible;
             return this;
         }
 

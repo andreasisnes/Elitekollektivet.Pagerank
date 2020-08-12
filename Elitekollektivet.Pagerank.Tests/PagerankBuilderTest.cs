@@ -42,9 +42,6 @@ namespace Elitekollektivet.Pagerank.Tests
             builder.Iterations(100);
             Assert.Equal(100, builder.Options.Iterations);
 
-            builder.MakeIrreducible(true);
-            Assert.True(builder.Options.MakeIrreducible);
-
             builder.MakeStochastic(true);
             Assert.True(builder.Options.MakeStochastic);
         }

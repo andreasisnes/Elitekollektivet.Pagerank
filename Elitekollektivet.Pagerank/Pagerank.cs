@@ -10,15 +10,15 @@ namespace Elitekollektivet.Pagerank
 {
     internal sealed class Pagerank : IPagerank
     {
-        private PagerankOptions _options;
+        private readonly PagerankOptions _options;
+
+        private readonly object _mutex;
 
         private Matrix<double> dense;
 
         private bool _madeStochastic;
 
         private bool _madeIrreducible;
-
-        private object _mutex;
 
         public Pagerank(PagerankOptions options)
         {
@@ -152,7 +152,7 @@ namespace Elitekollektivet.Pagerank
                     MakeStochastic();
                 }
 
-                if (!_madeIrreducible && _options.MakeIrreducible)
+                if (!_madeIrreducible)
                 {
                     MakeIrreducible();
                 }

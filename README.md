@@ -31,7 +31,6 @@ dotnet add package Elitekollektivet.Pagerank --version {VERSION}`
 ```bash
 paket add Elitekollektivet.Pagerank --version ${VERSION}
 ```
-The newest version is displayed in the nuget badge.
 
 ## Usage
 | PagerankBuilder fields | Meaning |

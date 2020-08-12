@@ -34,6 +34,11 @@ paket add Elitekollektivet.Pagerank --version ${VERSION}
 The newest version is displayed in the nuget badge.
 
 ## Usage
+| PagerankBuilder fields | Meaning |
+| ---------------------- | ------- |
+| ConvergenceRate        | 1 - The percentage to make a random jump an arbitrary node |
+| MakeStochastic         | Ensures every row sums to 1.0 |
+| Iterations             | *n* power method |
 ```C#
         static void Main(string[] args)
         {
@@ -48,7 +53,6 @@ The newest version is displayed in the nuget badge.
             var result = new PagerankBuilder(new PagerankOptions
             {
                 ConvergenceRate = .85,
-                MakeIrreducible = true,
                 MakeStochastic = true,
                 Iterations = 100,
             }).Build().SetLinkMatrix(data).Run();

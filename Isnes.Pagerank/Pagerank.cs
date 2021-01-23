@@ -10,15 +10,15 @@ namespace Isnes.Pagerank
 {
     internal sealed class Pagerank : IPagerank
     {
-        private PagerankOptions _options;
+        private readonly PagerankOptions _options;
+
+        private readonly object _mutex;
 
         private Matrix<double> dense;
 
         private bool _madeStochastic;
 
         private bool _madeIrreducible;
-
-        private object _mutex;
 
         public Pagerank(PagerankOptions options)
         {
@@ -100,7 +100,7 @@ namespace Isnes.Pagerank
             {
                 if (!_madeIrreducible)
                 {
-                    Dense = Dense.Multiply(_options.ConvergenceRate).Add(DenseMatrix.Create(Size, Size, (1.0 / Size) * (1.0 - _options.ConvergenceRate)));
+                    Dense = Dense.Multiply(_options.ConvergenceRate ?? 1.0).Add(DenseMatrix.Create(Size, Size, (1.0 / Size) * (1.0 - _options.ConvergenceRate ?? 1.0)));
                 }
 
                 _madeIrreducible = true;
@@ -152,7 +152,7 @@ namespace Isnes.Pagerank
                     MakeStochastic();
                 }
 
-                if (!_madeIrreducible && _options.MakeIrreducible)
+                if (!_madeIrreducible)
                 {
                     MakeIrreducible();
                 }

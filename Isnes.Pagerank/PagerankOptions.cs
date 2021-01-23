@@ -6,8 +6,6 @@ namespace Isnes.Pagerank
 
         public bool MakeStochastic { get; set; }
 
-        public bool MakeIrreducible { get; set; }
-
-        public double ConvergenceRate { get; set; }
+        public double? ConvergenceRate { get; set; }
     }
 }

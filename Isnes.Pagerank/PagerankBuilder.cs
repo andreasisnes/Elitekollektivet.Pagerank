@@ -1,7 +1,7 @@
 using System;
-using Elitekollektivet.Pagerank.Interfaces;
+using Isnes.Pagerank.Interfaces;
 
-namespace Elitekollektivet.Pagerank
+namespace Isnes.Pagerank
 {
     public sealed class PagerankBuilder
     {

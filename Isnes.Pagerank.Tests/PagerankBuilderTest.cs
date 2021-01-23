@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Elitekollektivet.Pagerank.Tests
+namespace Isnes.Pagerank.Tests
 {
     public class PagerankBuilderTest
     {

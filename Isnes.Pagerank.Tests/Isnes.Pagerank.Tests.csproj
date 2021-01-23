@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Elitekollektivet.Pagerank\Elitekollektivet.Pagerank.csproj" />
+    <ProjectReference Include="..\Isnes.Pagerank\Isnes.Pagerank.csproj" />
   </ItemGroup>
 
 </Project>

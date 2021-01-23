@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elitekollektivet.Pagerank", "Elitekollektivet.Pagerank\Elitekollektivet.Pagerank.csproj", "{A6536DA0-020F-4664-A1FD-D4A34E9167D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isnes.Pagerank", "Isnes.Pagerank\Isnes.Pagerank.csproj", "{A6536DA0-020F-4664-A1FD-D4A34E9167D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elitekollektivet.Pagerank.Tests", "Elitekollektivet.Pagerank.Tests\Elitekollektivet.Pagerank.Tests.csproj", "{F2394FDB-3C14-4637-993D-BFDC246706E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isnes.Pagerank.Tests", "Isnes.Pagerank.Tests\Isnes.Pagerank.Tests.csproj", "{F2394FDB-3C14-4637-993D-BFDC246706E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-namespace Elitekollektivet.Pagerank
+namespace Isnes.Pagerank
 {
     public sealed class PagerankOptions
     {

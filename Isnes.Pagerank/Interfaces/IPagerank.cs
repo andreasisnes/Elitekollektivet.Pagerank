@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Elitekollektivet.Pagerank.Interfaces
+namespace Isnes.Pagerank.Interfaces
 {
     public interface IPagerank
     {

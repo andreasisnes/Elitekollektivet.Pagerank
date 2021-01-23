@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Elitekollektivet.Pagerank.Extensions;
-using Elitekollektivet.Pagerank.Interfaces;
+using Isnes.Pagerank.Extensions;
+using Isnes.Pagerank.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
-namespace Elitekollektivet.Pagerank
+namespace Isnes.Pagerank
 {
     internal sealed class Pagerank : IPagerank
     {

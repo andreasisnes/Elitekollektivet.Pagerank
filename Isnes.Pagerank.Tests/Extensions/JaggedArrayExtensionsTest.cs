@@ -1,7 +1,7 @@
-using Elitekollektivet.Pagerank.Extensions;
+using Isnes.Pagerank.Extensions;
 using Xunit;
 
-namespace Elitekollektivet.Pagerank.Tests.Extensions
+namespace Isnes.Pagerank.Tests.Extensions
 {
     public class JaggedArrayExtensionsTest
     {

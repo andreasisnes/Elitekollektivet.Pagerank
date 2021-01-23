@@ -52,7 +52,7 @@ stages:
       displayName: 'Creating NuGet package'
       inputs:
         command: pack
-        packagesToPack: 'Elitekollektivet.Pagerank'
+        packagesToPack: 'Isnes.Pagerank'
         nobuild: true
         versioningScheme: byEnvVar
         versionEnvVar: Build.BuildNumber
@@ -72,7 +72,7 @@ stages:
     displayName: 'Publishing'
     variables:
       nuGetVersion: '4.3.0'
-    environment: 'Elitekollektivet'
+    environment: 'Isnes'
     strategy:
       runOnce:
         deploy:

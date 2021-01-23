@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Elitekollektivet.Pagerank.Tests
+namespace Isnes.Pagerank.Tests
 {
     public class PagerankTest
     {

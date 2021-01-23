@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Elitekollektivet.Pagerank.Extensions
+namespace Isnes.Pagerank.Extensions
 {
     public static class JaggedArrayExtension
     {

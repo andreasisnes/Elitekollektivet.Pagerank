@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Elitekollektivet.Pagerank</PackageId>
+    <PackageId>Isnes.Pagerank</PackageId>
     <Authors>Andreas Isnes Nilsen</Authors>
     <Description>Pagerank implementation</Description>
     <IsPackable>true</IsPackable>
-    <RepositoryUrl>https://github.com/andreasisnes/Elitekollektivet.Pagerank</RepositoryUrl>
+    <RepositoryUrl>https://github.com/andreasisnes/Isnes.Pagerank</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
